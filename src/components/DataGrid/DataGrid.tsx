@@ -1,6 +1,8 @@
+import { ColumnVisibility } from "./ColumnsVisibility"
 import type { DataGridProps } from "./DataGrid.types"
 import { Pagination } from "./Pagination"
 import { usePagination } from "./hooks/usePagination"
+import { useVisibleColumns } from "./hooks/useVisibleColumns"
 
 export function DataGrid<T>({
   data,
@@ -8,6 +10,8 @@ export function DataGrid<T>({
   loading,
   error,
 }: DataGridProps<T>) {
+  const { visibleColumns, hiddenColumns, toggleHiddenColumn } = useVisibleColumns({ columns })
+
   const {
     pageSize,
     paginatedData,
@@ -32,11 +36,19 @@ export function DataGrid<T>({
 
   return (
     <div>
+
+      <ColumnVisibility
+        columns={columns}
+        hiddenColumns={hiddenColumns}
+        toggleHiddenColumn={toggleHiddenColumn}
+      />
+
+
       <table className="w-full border-collapse">
 
         <thead>
           <tr>
-            {columns
+            {visibleColumns
               .map(column => (
                 <th key={column.id} className="text-left p-2 border-b">
                   {column.label}
@@ -48,7 +60,7 @@ export function DataGrid<T>({
         <tbody>
           {paginatedData.map((row, rowIndex) => (
             <tr key={rowIndex}>
-              {columns
+              {visibleColumns
                 .map(column => (
                   <td key={column.id} className="p-2 border-b">
                     {String(row[column.accessor])}
