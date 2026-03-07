@@ -55,8 +55,8 @@ export function DataGrid<T>({
           <tr>
             {visibleColumns
               .map(column => (
-                <th key={column.id} className="text-left p-2 border-b cursor-pointer" onClick={() => toggleSort(column)}>
-                  <div className="flex gap-2">
+                <th key={column.id} className="text-left p-2 border-b" >
+                  <div className="flex gap-2 cursor-pointer" onClick={() => toggleSort(column)}>
                     {column.label}
                     {sortColumn === column.accessor && (
                       <span className="ml-2">
