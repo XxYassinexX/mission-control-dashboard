@@ -2,6 +2,7 @@ import { ColumnVisibility } from "./ColumnsVisibility"
 import type { DataGridProps } from "./DataGrid.types"
 import { Pagination } from "./Pagination"
 import { usePagination } from "./hooks/usePagination"
+import { useSorting } from "./hooks/useSorting"
 import { useVisibleColumns } from "./hooks/useVisibleColumns"
 
 export function DataGrid<T>({
@@ -11,6 +12,7 @@ export function DataGrid<T>({
   error,
 }: DataGridProps<T>) {
   const { visibleColumns, hiddenColumns, toggleHiddenColumn } = useVisibleColumns({ columns })
+  const { sortedData, toggleSort, sortColumn, sortDirection } = useSorting(data)
 
   const {
     pageSize,
@@ -20,7 +22,7 @@ export function DataGrid<T>({
     changePageSize,
     isPreviousDisabled,
     isNextDisabled,
-  } = usePagination({ data })
+  } = usePagination({ data: sortedData })
 
   if (loading) {
     return <div className="">Loading...</div>
@@ -50,8 +52,13 @@ export function DataGrid<T>({
           <tr>
             {visibleColumns
               .map(column => (
-                <th key={column.id} className="text-left p-2 border-b">
+                <th key={column.id} className="text-left p-2 border-b cursor-pointer" onClick={() => toggleSort(column)}>
                   {column.label}
+                  {sortColumn === column.accessor && (
+                    <span className="ml-2">
+                      {sortDirection === "asc" ? "↑" : "↓"}
+                    </span>
+                  )}
                 </th>
               ))}
           </tr>
