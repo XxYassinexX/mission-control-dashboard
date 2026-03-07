@@ -1,4 +1,9 @@
+import { DataGrid } from "./components/DataGrid/DataGrid"
+import { columns } from "./eventColumns";
+import { useEvents } from "./useEvents";
+
 function App() {
+  const {events, loading, error} = useEvents();
   return (
     <div className="min-h-screen bg-slate-950 text-slate-200 py-10 px-15 flex flex-col justify-between">
       <div className="space-y-10">
@@ -28,7 +33,12 @@ function App() {
           </h2>
 
           <div>
-            {/* DataGrid component will go here */}
+            <DataGrid 
+              data={events}
+              columns={columns}
+              loading={loading}
+              error={error}
+            />
           </div>
         </section>
       </div>
