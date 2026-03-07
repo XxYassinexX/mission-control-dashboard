@@ -36,10 +36,6 @@ export function DataGrid<T>({
     return <div>Error: {error}</div>
   }
 
-  if (data.length === 0) {
-    return <div className="text-center">No data available</div>
-  }
-
   return (
     <div>
 
@@ -79,16 +75,23 @@ export function DataGrid<T>({
         </thead>
 
         <tbody>
-          {paginatedData.map((row, rowIndex) => (
-            <tr key={rowIndex}>
-              {visibleColumns
-                .map(column => (
-                  <td key={column.id} className="p-2 border-b">
-                    {String(row[column.accessor])}
-                  </td>
-                ))}
-            </tr>
-          ))}
+           {paginatedData.length === 0 ? (
+              <tr>
+                <td colSpan={visibleColumns.length} className="text-center p-4">
+                  No data available
+                </td>
+              </tr>
+            ) : (
+            paginatedData.map((row, rowIndex) => (
+              <tr key={rowIndex}>
+                {visibleColumns
+                  .map(column => (
+                    <td key={column.id} className="p-2 border-b">
+                      {String(row[column.accessor])}
+                    </td>
+                  ))}
+              </tr>
+            )))}
         </tbody>
 
       </table>
