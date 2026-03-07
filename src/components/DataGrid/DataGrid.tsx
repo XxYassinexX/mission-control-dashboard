@@ -100,24 +100,11 @@ export function DataGrid<T>({
         <Pagination
           value={pageSize}
           onChange={changePageSize}
+          isPreviousDisabled={isPreviousDisabled}
+          isNextDisabled={isNextDisabled}
+          onPrevious={goToPreviousPage}
+          onNext={goToNextPage}
         />
-
-        <button
-          className="px-4 py-2 bg-yellow-600 rounded-md hover:bg-yellow-500 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-          disabled={isPreviousDisabled}
-          onClick={goToPreviousPage}
-        >
-          Previous
-        </button>
-
-        <button
-          className="px-4 py-2 bg-yellow-600 rounded-md hover:bg-yellow-500 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-          disabled={isNextDisabled}
-          onClick={goToNextPage}
-        >
-          Next
-        </button>
-
       </div>
     </div>
   )
