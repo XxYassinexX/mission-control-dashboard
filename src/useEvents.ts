@@ -14,5 +14,10 @@ export function useEvents() {
       .finally(() => setLoading(false))
   }, [])
 
-  return { events, loading, error }
+  function addEvent(event: SpaceEvent) {
+    setEvents(prev => [event, ...prev])
+  }
+
+
+  return { events, loading, error, addEvent }
 }

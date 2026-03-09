@@ -8,7 +8,7 @@ import type { EventFormValues } from "./components/EventFrom/EventForm.types";
 
 function App() {
   const [isFormOpen, setIsFormOpen] = useState(false)
-  const {events, loading, error} = useEvents();
+  const {events, loading, error, addEvent} = useEvents();
   const timelineEvents = events.slice(0, 30)
   const handleNewEventClick = () => {
     setIsFormOpen(true)
@@ -18,7 +18,11 @@ function App() {
   }
 
   function handleSave(values: EventFormValues) {
-    console.log("New event:", values)
+    const newEvent = {  
+      ...values,
+      id: Date.now().toString(),
+    }
+    addEvent(newEvent)
     setIsFormOpen(false)
   }
   return (
