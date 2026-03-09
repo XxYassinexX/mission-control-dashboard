@@ -1,9 +1,11 @@
 import { DataGrid } from "./components/DataGrid/DataGrid"
+import { TimeLine } from "./components/TimeLine/TimeLine";
 import { columns } from "./eventColumns";
 import { useEvents } from "./useEvents";
 
 function App() {
   const {events, loading, error} = useEvents();
+  const timelineEvents = events.slice(0, 30)
   return (
     <div className="min-h-screen bg-slate-950 text-slate-200 py-10 px-15 flex flex-col justify-between">
       <div className="space-y-10">
@@ -23,7 +25,7 @@ function App() {
           </h2>
 
           <div>
-            {/* Timeline component will go here */}
+            <TimeLine events={timelineEvents} loading={loading} error={error} />
           </div>
         </section>
 
