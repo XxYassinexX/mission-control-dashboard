@@ -1,3 +1,4 @@
+import React from "react"
 import type { SpaceEvent } from "../../types/event"
 import { groupEventsByDay } from "./groupEventsByDay"
 
@@ -23,23 +24,49 @@ export function TimeLine({ events, loading, error }: TimeLineProps) {
 
   const groupedEvents = groupEventsByDay(events)
   const days = Object.keys(groupedEvents)
+  function handleKeyDown(e: React.KeyboardEvent<HTMLLIElement>) {
+    if (e.key === "ArrowDown" || e.key === "ArrowRight") {
+      e.preventDefault()
+      const next =
+        e.currentTarget.nextElementSibling ??
+        e.currentTarget.parentElement?.parentElement?.nextElementSibling?.querySelector("li")
+
+      if (next instanceof HTMLElement) {
+        next.focus()
+      }
+    }
+
+    if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
+      e.preventDefault()
+
+      const prev =
+        e.currentTarget.previousElementSibling ??
+        e.currentTarget.parentElement?.parentElement?.previousElementSibling?.querySelector("li:last-child")
+
+        if (prev instanceof HTMLElement) {
+          prev.focus()
+        }
+    }
+  }
 
   return (
-    <div className="space-y-6">
+    <section aria-label="Space events timeline">
 
       {days.map(day => (
         <div key={day}>
 
-          <h3 className="font-bold text-lg mb-2">
+          <h3 id={`day-${day}`} className="font-bold text-lg mb-2">
             {day}
           </h3>
 
-          <ul className="space-y-2">
+          <ul className="space-y-2" aria-labelledby={`day-${day}`}>
 
             {groupedEvents[day].map(event => (
               <li
                 key={event.id}
-                className="p-3 border rounded"
+                tabIndex={0}
+                className="p-3 border rounded focus:outline focus:outline-yellow-500"
+                onKeyDown={handleKeyDown}
               >
                 {event.title}
               </li>
@@ -50,6 +77,6 @@ export function TimeLine({ events, loading, error }: TimeLineProps) {
         </div>
       ))}
 
-    </div>
+    </section>
   )
 }
