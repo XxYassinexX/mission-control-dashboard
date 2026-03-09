@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import type { EventFormProps, EventFormValues } from './EventForm.types'
+import type { EventFormError, EventFormProps, EventFormValues } from './EventForm.types'
 import { EVENT_TYPES } from './constants';
+import { validate } from './validations';
 
 const defaultValues: EventFormValues = {
   title: "",
@@ -13,7 +14,7 @@ const defaultValues: EventFormValues = {
 function EventForm({ onSave, onCancel }: EventFormProps) {
 
   const [values, setValues] = useState<EventFormValues>(defaultValues)
-
+  const [errors, setErrors] = useState<EventFormError>({})
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
     const { name, value } = e.target
 
@@ -21,10 +22,27 @@ function EventForm({ onSave, onCancel }: EventFormProps) {
         ...prev,
         [name]: value
     }))
+
+    // clear error on typing only for fields that have an error
+    if(errors[name as keyof EventFormValues]) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: undefined
+      }))
+    }
   }
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+      const validationErrors = validate(values)
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors)
+      return
+    }
+
+    setErrors({})
+
     onSave(values)
     setValues(defaultValues)
   }
@@ -50,6 +68,9 @@ function EventForm({ onSave, onCancel }: EventFormProps) {
           className="w-full rounded-md border border-slate-700 bg-slate-800/70 px-3 py-2 text-sm text-slate-100 outline-none transition focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20"
           placeholder="Event title"
         />
+        {errors.title && (
+          <p className="text-red-500 text-sm mt-1">{errors.title}</p>
+        )}
       </div>
 
       <div>
@@ -83,6 +104,9 @@ function EventForm({ onSave, onCancel }: EventFormProps) {
           onChange={handleChange}
           className="w-full rounded-md border border-slate-700 bg-slate-800/70 px-3 py-2 text-sm text-slate-100 outline-none transition focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20"
         />
+        {errors.date && (
+          <p className="text-red-500 text-sm mt-1">{errors.date}</p>
+        )}
       </div>
 
       <div>

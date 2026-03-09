@@ -6,3 +6,5 @@ export type EventFormProps = {
   onSave: (values: EventFormValues) => void
   onCancel: () => void
 }
+
+export type EventFormError = Partial<Record<keyof EventFormValues, string>>
